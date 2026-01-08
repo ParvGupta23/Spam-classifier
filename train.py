@@ -31,32 +31,3 @@ joblib.dump(model, "spam_model.pkl")
 joblib.dump(X.columns.tolist(), "features.pkl")
 
 print("Model trained and saved.")
-import pandas as pd
-import joblib
-from sklearn.metrics import classification_report
-
-df = pd.read_csv("data/emails.csv")
-
-X = df.drop(columns=["Email No.", "Prediction"])
-y = df["Prediction"]
-
-model = joblib.load("spam_model.pkl")
-preds = model.predict(X)
-
-print(classification_report(y, preds))
-import joblib
-import pandas as pd
-
-model = joblib.load("spam_model.pkl")
-features = joblib.load("features.pkl")
-
-# Example: fake email vector
-email_vector = dict.fromkeys(features, 0)
-email_vector["free"] = 2
-email_vector["money"] = 1
-email_vector["win"] = 1
-
-X_new = pd.DataFrame([email_vector])
-prob = model.predict_proba(X_new)[0][1]
-
-print(f"Spam Probability: {prob*100:.2f}%")
